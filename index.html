@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Support Decision Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 p-4 font-sans text-slate-900">
+
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Mentor Decision Support</h1>
+            <p class="text-slate-600 border-b pb-4">Decision Tree 1: What type of support is this?</p>
+        </header>
+
+        <!-- START VIEW -->
+        <div id="start-view" class="space-y-6 fade-in">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-blue-100 px-2 py-1 rounded text-blue-700 font-bold text-xs uppercase tracking-wider">Step 1</span>
+                    <h2 class="text-xl font-semibold">Mentee shares a challenge</h2>
+                </div>
+                <p class="text-slate-700 mb-6 font-medium">Q1. This sounds mostly like...</p>
+
+                <div class="grid gap-3">
+                    <!-- Academic -->
+                    <button onclick="showResult('academic')" class="group flex items-center gap-4 p-4 text-left bg-white border border-slate-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all w-full">
+                        <div class="p-2 bg-blue-50 rounded-lg text-blue-600">📖</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Academic & Study Support</h3>
+                            <p class="text-sm text-slate-500">Skills, planning, assessments, navigating systems.</p>
+                        </div>
+                    </button>
+
+                    <!-- Wellbeing -->
+                    <button onclick="showResult('wellbeing')" class="group flex items-center gap-4 p-4 text-left bg-white border border-slate-200 rounded-xl hover:border-emerald-400 hover:bg-emerald-50 transition-all w-full">
+                        <div class="p-2 bg-emerald-50 rounded-lg text-emerald-600">🌱</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Wellbeing-in-Context</h3>
+                            <p class="text-sm text-slate-500">Stress, overwhelm, confidence linked to study.</p>
+                        </div>
+                    </button>
+
+                    <!-- Red Flags -->
+                    <button onclick="showResult('redflags')" class="group flex items-center gap-4 p-4 text-left bg-white border border-slate-200 rounded-xl hover:border-rose-400 hover:bg-rose-50 transition-all w-full">
+                        <div class="p-2 bg-rose-50 rounded-lg text-rose-600">⚠️</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-rose-700">Red Flags & Escalation</h3>
+                            <p class="text-sm text-slate-500">Safety concerns, severe distress.</p>
+                        </div>
+                    </button>
+
+                    <!-- Mixed -->
+                    <button onclick="showResult('mixed')" class="group flex items-center gap-4 p-4 text-left bg-white border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50 transition-all w-full">
+                        <div class="p-2 bg-amber-50 rounded-lg text-amber-600">❓</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Mixed or Unclear</h3>
+                            <p class="text-sm text-slate-500">Pause and clarify together before choosing.</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-blue-600 p-5 rounded-xl text-white">
+                <p class="text-sm"><strong>Quick Tip:</strong> You don’t need the perfect answer. You only need the next helpful step and the right pathway.</p>
+            </div>
+        </div>
+
+        <!-- RESULT VIEW -->
+        <div id="result-view" class="hidden fade-in space-y-4">
+            <button onclick="goBack()" class="text-slate-500 hover:text-slate-800 font-medium flex items-center gap-2 mb-2">
+                ← Back to options
+            </button>
+
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div id="result-accent" class="h-2 w-full bg-blue-500"></div>
+                <div class="p-6 md:p-8">
+                    <h2 id="result-title" class="text-2xl font-bold mb-6">Title</h2>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-xl mb-6">
+                        <p class="font-bold text-blue-800 text-xs uppercase tracking-widest mb-2">Try this</p>
+                        <p id="result-script" class="text-lg italic text-slate-800 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-emerald-50 border-l-4 border-emerald-600 p-6 rounded-r-xl">
+                        <p class="font-bold text-emerald-800 text-xs uppercase tracking-widest mb-2">Mentor Check</p>
+                        <p id="result-check" class="text-slate-800"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const content = {
+            academic: {
+                title: 'Academic & Study Support',
+                color: '#2563eb',
+                script: "“It sounds like the main hurdle right now is getting a handle on the academic side of things. Let’s look at how you’re managing your study load and where we can find some specific skills or systems to help.”",
+                check: "Focus on empowering the mentee with tools and navigating university resources. You are a guide, not a tutor."
+            },
+            wellbeing: {
+                title: 'Wellbeing-in-Context',
+                color: '#10b981',
+                script: "“I can hear that the pressure of uni is really impacting how you're feeling overall. Let's talk about how you're balancing things and what we can do to manage that stress together.”",
+                check: "Acknowledge the feeling first. Your role is to provide a supportive space to discuss study-related stress, not to be a therapist."
+            },
+            redflags: {
+                title: 'Red Flags & Escalation',
+                color: '#e11d48',
+                script: "“I’m really concerned about what you’ve shared with me. My priority is your safety. Let’s look at the immediate support services available right now so we can get you the help you need.”",
+                check: "Stop and follow the formal escalation protocol immediately. Do not try to handle severe distress on your own."
+            },
+            mixed: {
+                title: 'Mixed or Unclear',
+                color: '#d97706',
+                script: "“Let’s slow this down and work out what kind of support would help most right now — study support, wellbeing support, or something more urgent.”",
+                check: "You don’t need the perfect answer. You only need the next helpful step and the right pathway."
+            }
+        };
+
+        function showResult(id) {
+            const data = content[id];
+            document.getElementById('result-title').innerText = data.title;
+            document.getElementById('result-script').innerText = data.script;
+            document.getElementById('result-check').innerText = data.check;
+            document.getElementById('result-accent').style.backgroundColor = data.color;
+            
+            document.getElementById('start-view').classList.add('hidden');
+            document.getElementById('result-view').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            document.getElementById('start-view').classList.remove('hidden');
+            document.getElementById('result-view').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
